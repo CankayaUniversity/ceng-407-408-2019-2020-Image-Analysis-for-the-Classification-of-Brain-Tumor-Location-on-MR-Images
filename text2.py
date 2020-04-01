@@ -6,6 +6,8 @@ from matplotlib import pyplot as plt
 from scipy import ndimage
 from PIL import Image
 from PIL import Image
+import pyodbc
+import pandas as pd
 l = 10
 a = []
 for i in range(500):
@@ -21,10 +23,19 @@ class HPF(object):
 
     def process(self):
         return ndimage.convolve(self.image, self.kernel)
+gray = cv2.imread('Y1.jpg',0) 
+conn = pyodbc.connect('Driver={SQL Server};'
+                      'Server=DESKTOP-27S8BAF\MSSQLSERVER01;'
+                      'Database=Final;'
+                      'Trusted_Connection=yes;')
 
+cursor = conn.cursor()
 img = cv2.imread('Y1.jpg')
 #gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 gray = cv2.imread('Y1.jpg',0)
+a=pyodbc.Binary(gray)
+cursor.execute("insert into original(image, type,isTumor,isCancerous) values (?,?,?,?)", a,'0000',0,0)
+conn.commit()
 median = cv2.medianBlur(gray,5)
 cv2.imshow('blurred image', median)
 cv2.waitKey(0)  
@@ -73,3 +84,6 @@ res = center[label.flatten()]
 result_image = res.reshape((brain_out.shape))
 cv2.imshow('result', result_image)
 cv2.waitKey(0)
+b=pyodbc.Binary(result_image)
+cursor.execute("insert into segmented( isSegmented,seg_image) values (?,?)", 1,b)
+conn.commit()
