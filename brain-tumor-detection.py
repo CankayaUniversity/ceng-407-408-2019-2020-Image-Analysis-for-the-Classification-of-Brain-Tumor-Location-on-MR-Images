@@ -40,7 +40,7 @@ h5_data = currentdir + "\data.h5"
 h5_labels = currentdir + "\labels.h5"
 train_labels = os.listdir(train_path)
 train_labels.sort()
-connection = mysql.connector.connect(host='127.0.0.1', database='brain_project', user='root', port='3307', password='nisanS36')
+connection = mysql.connector.connect(host='127.0.0.1', database='brain_project', user='root', port='3307', password='password')
 for i in range(len(files)):
     path = files[i]
     folder = path.strip(img_dir)
