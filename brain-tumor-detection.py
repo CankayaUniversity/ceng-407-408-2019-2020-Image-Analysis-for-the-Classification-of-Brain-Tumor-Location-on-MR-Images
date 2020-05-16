@@ -40,7 +40,7 @@ h5_data = currentdir + "\data.h5"
 h5_labels = currentdir + "\labels.h5"
 train_labels = os.listdir(train_path)
 train_labels.sort()
-connection = mysql.connector.connect(host='127.0.0.1', database='brain_project', user='root', port='3307', password='password')
+connection = mysql.connector.connect(host='127.0.0.1', database='tumordetection', user='root', port='3307', password='password')
 for i in range(len(files)):
     path = files[i]
     folder = path.strip(img_dir)
@@ -145,9 +145,11 @@ for i in range(len(files)):
         label_bool = 1
     
     img_str = cv2.imencode('.jpg', img)[1].tostring()
-    sql_insert_blob_query = """ INSERT INTO original
-                             (image, isTumor, isCancerous) VALUES (%s,%s,%s)"""
-    insert_blob_tuple = (img_str, label_bool, 0)
+    img_str2=cv2.imencode('.jpg', segmented)[1].tostring()
+    img_str3=cv2.imencode('.jpg', erode)[1].tostring()
+    sql_insert_blob_query = """ INSERT INTO detection
+                             (original_image,segmented_image,classified_image, isTumor, location) VALUES (%s,%s,%s,%s,%s)"""
+    insert_blob_tuple = (img_str, img_str2,img_str3,label_bool, ?loction)
     cursor = connection.cursor()
     cursor.execute(sql_insert_blob_query,insert_blob_tuple )
     connection.commit()
