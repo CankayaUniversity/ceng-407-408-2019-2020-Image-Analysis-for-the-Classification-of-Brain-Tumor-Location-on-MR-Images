@@ -31,13 +31,13 @@ h5_data = currentdir + "\data.h5"
 h5_labels = currentdir + "\labels.h5"
 train_labels = os.listdir(train_path)
 train_labels.sort()
-#connection = mysql.connector.connect(host='127.0.0.1', database='tumordetection', user='root', port='3307', password='password')
+connection = mysql.connector.connect(host='127.0.0.1', database='tumors', user='root', port='3307', password='nisanS36')
 
 def trainTest():
     for i in range(len(files)):
         path = files[i]
         detectTumor(path)
-    #connection.close()    
+    connection.close()    
     
 def detectTumor(path):
     image = readImage(path)
@@ -46,6 +46,7 @@ def detectTumor(path):
     postprocessed = postprocessImage(segmented)
     contour = drawContour(segmented, postprocessed)
     result = findTumor(postprocessed)
+    writeDB(image,result)
     createFeatureVector(image)
         
 def readImage(path):
@@ -162,18 +163,25 @@ def findTumor(erode):
     return status
    
 def writeDB(image, status):
+    connection = mysql.connector.connect(host='127.0.0.1', database='tumors', user='root', port='3307', password='nisanS36')
+
+    a=''
+
     if status[0] == "No":
-        label_bool = 0
+        b = "No"
+        
     else:
-        label_bool = 1
+        b = "Yes"
+        a=status[1]
             
     img_str = cv2.imencode('.jpg', image)[1].tostring()
-    sql_insert_blob_query = """ INSERT INTO original
-                            (image, isTumor, isCancerous) VALUES (%s,%s,%s)"""
-    insert_blob_tuple = (img_str, label_bool, 0)
+    sql_insert_blob_query = """ INSERT INTO new_table
+                            (image, isTumor, location) VALUES (%s,%s,%s)"""
+    insert_blob_tuple = (img_str, b, a)
     cursor = connection.cursor()
     cursor.execute(sql_insert_blob_query,insert_blob_tuple )
     connection.commit()
+    
     
 def createFeatureVector(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -208,6 +216,5 @@ def classifyTumor():
     accuracy =  cv_results.mean() * 100
     return accuracy
 
-#trainTest() 
-#classifyTumor()
-
+trainTest() 
+classifyTumor()
