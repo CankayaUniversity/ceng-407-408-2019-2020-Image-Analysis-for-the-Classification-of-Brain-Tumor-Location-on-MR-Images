@@ -31,7 +31,7 @@ h5_data = currentdir + "\data.h5"
 h5_labels = currentdir + "\labels.h5"
 train_labels = os.listdir(train_path)
 train_labels.sort()
-connection = mysql.connector.connect(host='127.0.0.1', database='tumors', user='root', port='3307', password='nisanS36')
+connection = mysql.connector.connect(host='127.0.0.1', database='tumors', user='root', port='3307', password='password')
 
 def trainTest():
     for i in range(len(files)):
