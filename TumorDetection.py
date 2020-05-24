@@ -163,8 +163,7 @@ def findTumor(erode):
     return status
    
 def writeDB(image, status):
-    connection = mysql.connector.connect(host='127.0.0.1', database='tumors', user='root', port='3307', password='nisanS36')
-
+ 
     a=''
 
     if status[0] == "No":
