@@ -97,6 +97,7 @@ class Window(QWidget):
         self.contourImage.setPixmap(QPixmap(imageToPixmap))
         result = TumorDetection.findTumor(postprocessed)
         TumorDetection.createFeatureVector(image)
+        TumorDetection.writeDB(image, result)
 
         fontStyle = QFont("Arial", 10, QFont.Bold)
         self.tumorInfo.setFont(fontStyle)
