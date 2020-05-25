@@ -163,24 +163,13 @@ def findTumor(erode):
     return status
    
 def writeDB(image, status):
- 
-    a=''
-
-    if status[0] == "No":
-        b = "No"
-        
-    else:
-        b = "Yes"
-        a=status[1]
-            
     img_str = cv2.imencode('.jpg', image)[1].tostring()
     sql_insert_blob_query = """ INSERT INTO new_table
                             (image, isTumor, location) VALUES (%s,%s,%s)"""
-    insert_blob_tuple = (img_str, b, a)
+    insert_blob_tuple = (img_str, status[0], status[1])
     cursor = connection.cursor()
     cursor.execute(sql_insert_blob_query,insert_blob_tuple )
     connection.commit()
-    
     
 def createFeatureVector(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
