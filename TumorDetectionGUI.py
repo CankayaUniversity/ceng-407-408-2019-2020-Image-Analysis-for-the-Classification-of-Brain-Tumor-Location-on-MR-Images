@@ -11,6 +11,7 @@ import numpy as np
 import glob
 import os
 import TumorDetection
+connection = mysql.connector.connect(host='127.0.0.1', database='tumors', user='root', port='3307', password='password')
 
 class Window(QWidget):
     def __init__(self):
