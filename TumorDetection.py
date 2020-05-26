@@ -166,7 +166,10 @@ def writeDB(image, status):
     img_str = cv2.imencode('.jpg', image)[1].tostring()
     sql_insert_blob_query = """ INSERT INTO new_table
                             (image, isTumor, location) VALUES (%s,%s,%s)"""
-    insert_blob_tuple = (img_str, status[0], status[1])
+    if len(status) > 1:
+        insert_blob_tuple = (img_str, status[0], status[1])
+    else:
+        insert_blob_tuple = (img_str, status[0], "")
     cursor = connection.cursor()
     cursor.execute(sql_insert_blob_query,insert_blob_tuple )
     connection.commit()
