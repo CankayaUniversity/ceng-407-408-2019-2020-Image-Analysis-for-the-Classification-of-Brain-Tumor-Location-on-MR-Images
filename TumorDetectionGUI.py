@@ -10,6 +10,7 @@ import cv2
 import numpy as np
 import glob
 import os
+import mysql.connector
 import TumorDetection
 connection = mysql.connector.connect(host='127.0.0.1', database='tumors', user='root', port='3307', password='password')
 
