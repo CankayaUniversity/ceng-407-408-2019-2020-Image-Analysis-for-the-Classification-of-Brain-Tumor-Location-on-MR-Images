@@ -10,9 +10,7 @@ import cv2
 import numpy as np
 import glob
 import os
-import mysql.connector
 import TumorDetection
-connection = mysql.connector.connect(host='127.0.0.1', database='tumors', user='root', port='3307', password='password')
 
 class Window(QWidget):
     def __init__(self):
@@ -98,8 +96,6 @@ class Window(QWidget):
         imageToPixmap = QPixmap(QPixmap.fromImage(contourImage))
         self.contourImage.setPixmap(QPixmap(imageToPixmap))
         result = TumorDetection.findTumor(postprocessed)
-        TumorDetection.createFeatureVector(image)
-        TumorDetection.writeDB(image, result)
 
         fontStyle = QFont("Arial", 10, QFont.Bold)
         self.tumorInfo.setFont(fontStyle)
