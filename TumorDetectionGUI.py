@@ -94,7 +94,6 @@ class Window(QWidget):
         contour = TumorDetection.drawContour(segmented, postprocessed)
         contourImage = self.getQImage(contour)
         imageToPixmap = QPixmap(QPixmap.fromImage(contourImage))
-        self.contourImage.setPixmap(QPixmap(imageToPixmap))
         result = TumorDetection.findTumor(postprocessed)
 
         fontStyle = QFont("Arial", 10, QFont.Bold)
